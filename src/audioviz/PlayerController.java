@@ -86,6 +86,7 @@ public class PlayerController implements Initializable {
         visualizers.add(new EllipseVisualizer1());
         visualizers.add(new EllipseVisualizer2());
         visualizers.add(new EllipseVisualizer3());
+        visualizers.add(new coolVisualizer());
         for (Visualizer visualizer : visualizers) {
             MenuItem menuItem = new MenuItem(visualizer.getName());
             menuItem.setUserData(visualizer);
@@ -125,7 +126,7 @@ public class PlayerController implements Initializable {
         bandsText.setText(Integer.toString(numBands));
     }
     
-    private void changeVisualizer(Visualizer visualizer) {
+      private void changeVisualizer(Visualizer visualizer) {
         if (currentVisualizer != null) {
             currentVisualizer.end();
         }
@@ -165,12 +166,9 @@ public class PlayerController implements Initializable {
     
     private void handleReady() {
         Duration duration = mediaPlayer.getTotalDuration();
-        double time = duration.toMillis();
-        //lengthText.setText(duration.toString());
-        lengthText.setText(String.format("%.1f ms",time));
+        lengthText.setText(duration.toString());
         Duration ct = mediaPlayer.getCurrentTime();
-        double ms = ct.toMillis();
-        currentText.setText(String.format("%.1f ms",ms));
+        currentText.setText(ct.toString());
         currentVisualizer.start(numBands, vizPane);
         timeSlider.setMin(0);
         timeSlider.setMax(duration.toMillis());
@@ -182,12 +180,11 @@ public class PlayerController implements Initializable {
         timeSlider.setValue(0);
     }
     
-    private void handleUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
+   private void handleUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
         Duration ct = mediaPlayer.getCurrentTime();
         double ms = ct.toMillis();
-        currentText.setText(String.format("%.1f ms",ms));
+        currentText.setText(String.format("%.1f ms", ms));
         timeSlider.setValue(ms);
-       
         
         currentVisualizer.update(timestamp, duration, magnitudes, phases);
     }
